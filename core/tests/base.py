@@ -12,7 +12,7 @@ class BookBaseTestCase(APITestCase):
             author="Test Author",
             cover="HARD",
             inventory=10,
-            daily_fee=9.99
+            daily_fee="9.99"
         )
 
 
@@ -24,14 +24,14 @@ class UserBaseTestCase(BookBaseTestCase):
             author="Test Author",
             cover="HARD",
             inventory=10,
-            daily_fee=9.99
+            daily_fee="9.99"
         )
         cls.user = get_user_model().objects.create_user(
             email="user@user.com",
             password="asdf6789%Q"
         )
         cls.admin = get_user_model().objects.create_superuser(
-            email="user@user.com",
+            email="admin@admin.com",
             password="asdf6789%Q"
         )
 
