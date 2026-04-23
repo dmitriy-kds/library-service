@@ -1,0 +1,13 @@
+from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.viewsets import ViewSet
+from rest_framework.request import Request
+
+
+class IsAdminOrIfUnauthenticatedReadOnly(BasePermission):
+    def has_permission(self, request: Request, view: ViewSet) -> bool:
+        return bool(
+            (
+                request.method in SAFE_METHODS
+            )
+            or (request.user.is_authenticated and request.user.is_staff)
+        )
