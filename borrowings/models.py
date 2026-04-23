@@ -45,7 +45,6 @@ class Borrowing(models.Model):
 
     def save(
         self,
-        *args,
         force_insert=False,
         force_update=False,
         using=None,
@@ -53,17 +52,21 @@ class Borrowing(models.Model):
     ):
         self.full_clean()
         return super().save(
-            *args, force_insert, force_update, using, update_fields
+            force_insert=force_insert,
+            force_update=force_update,
+            using=using,
+            update_fields=update_fields
         )
 
     class Meta:
         verbose_name_plural = "borrowings"
 
     def __str__(self) -> str:
+        actual_return_date = self.actual_return_date or "Not returned yet"
         return (
             f"{self.user.email}, "
             f"{self.book.title}: "
             f"{self.borrow_date} - "
             f"{self.expected_return_date} - "
-            f"{self.actual_return_date}"
+            f"{actual_return_date}"
         )
