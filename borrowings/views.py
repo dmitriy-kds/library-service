@@ -1,3 +1,5 @@
+import asyncio
+
 from django.db import transaction
 from django.db.models import QuerySet
 from rest_framework import viewsets
@@ -6,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 
 from borrowings.models import Borrowing
+from borrowings.notifications import notify_borrowing_created
 from borrowings.serializers import (
     BorrowingListSerializer,
     BorrowingDetailSerializer,
@@ -59,7 +62,9 @@ class BorrowingsViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer: BorrowingCreateSerializer) -> None:
         with transaction.atomic():
+            user = self.request.user
             book = serializer.validated_data["book"]
             book.inventory -= 1
             book.save()
-            serializer.save(user=self.request.user)
+            serializer.save(user=user)
+        notify_borrowing_created(user, serializer.validated_data)
