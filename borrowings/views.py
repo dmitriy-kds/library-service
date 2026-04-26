@@ -1,9 +1,13 @@
 import asyncio
+from typing import Any
 
 from django.db import transaction
 from django.db.models import QuerySet
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 from rest_framework import viewsets
 from rest_framework.decorators import action
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
 
@@ -19,8 +23,13 @@ from borrowings.serializers import (
 
 class BorrowingsViewSet(viewsets.ModelViewSet):
 
+    @extend_schema(
+        request=BorrowingReturnSerializer,
+        responses=BorrowingReturnSerializer
+    )
     @action(detail=True, methods=["post"], url_path="return")
     def return_borrowing(self, request, pk: int = None) -> Response:
+        """Endpoint for returning borrowed books"""
         borrowing = Borrowing.objects.get(pk=pk)
         serializer = BorrowingReturnSerializer(borrowing, data=request.data)
         with transaction.atomic():
@@ -68,3 +77,22 @@ class BorrowingsViewSet(viewsets.ModelViewSet):
             book.save()
             serializer.save(user=user)
         notify_borrowing_created(user, serializer.validated_data)
+
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                "user_id",
+                type=OpenApiTypes.INT,
+                description="Filter by user id "
+                            "(ex. ?user_id=1)",
+            ),
+            OpenApiParameter(
+                "is_active",
+                type=OpenApiTypes.BOOL,
+                description="Filter by borrowing status "
+                            "(ex. ?is_active=true or ?is_active=true)",
+            )
+        ]
+    )
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> Response:
+        return super().list(request, *args, **kwargs)
