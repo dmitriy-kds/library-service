@@ -39,29 +39,33 @@ class BorrowingBaseTestCase(UserBaseTestCase):
         super(BorrowingBaseTestCase, cls).setUpTestData()
         cls.user_borrowing_1 = Borrowing.objects.create(
             borrow_date=datetime.date.today(),
-            expected_return_date=datetime.date.today() +
-                                 datetime.timedelta(days=10),
+            expected_return_date=(
+                datetime.date.today() + datetime.timedelta(days=10)
+            ),
             book=cls.book,
             user=cls.user
         )
         cls.user_borrowing_2 = Borrowing.objects.create(
             borrow_date=datetime.date.today(),
-            expected_return_date=datetime.date.today() +
-                                 datetime.timedelta(days=5),
+            expected_return_date=(
+                datetime.date.today() + datetime.timedelta(days=5)
+            ),
             book=cls.book,
             user=cls.user
         )
         cls.admin_borrowing_1 = Borrowing.objects.create(
             borrow_date=datetime.date.today(),
-            expected_return_date=datetime.date.today() +
-                                 datetime.timedelta(days=10),
+            expected_return_date=(
+                datetime.date.today() + datetime.timedelta(days=10)
+            ),
             book=cls.book,
             user=cls.admin
         )
         cls.admin_borrowing_2 = Borrowing.objects.create(
             borrow_date=datetime.date.today(),
-            expected_return_date=datetime.date.today() +
-                                 datetime.timedelta(days=5),
+            expected_return_date=(
+                datetime.date.today() + datetime.timedelta(days=5)
+            ),
             book=cls.book,
             user=cls.admin
         )
