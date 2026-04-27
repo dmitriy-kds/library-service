@@ -73,7 +73,10 @@ class PublicUserApiTests(APITestCase):
         response = self.client.post(TOKEN_URL, payload)
 
         refresh_token = response.data["refresh"]
-        response = self.client.post(TOKEN_REFRESH_URL, {"refresh": refresh_token})
+        response = self.client.post(
+            TOKEN_REFRESH_URL,
+            {"refresh": refresh_token}
+        )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_refresh_token_invalid(self):

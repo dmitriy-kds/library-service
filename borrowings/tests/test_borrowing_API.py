@@ -58,9 +58,9 @@ class AuthorizedBorrowingApiTests(BorrowingBaseTestCase):
 
     def test_authorized_user_borrowing_create_success(self):
         inventory = self.book.inventory
-        payload ={
-            "expected_return_date": datetime.date.today() +
-                                    datetime.timedelta(days=1),
+        payload = {
+            "expected_return_date": (datetime.date.today() +
+                                     datetime.timedelta(days=1)),
             "book": self.book.id,
         }
         url = reverse(
@@ -74,9 +74,10 @@ class AuthorizedBorrowingApiTests(BorrowingBaseTestCase):
     def test_cannot_create_borrowing_if_inventory_is_zero(self):
         self.book.inventory = 0
         self.book.save()
-        payload ={
-            "expected_return_date": datetime.date.today() +
-                                    datetime.timedelta(days=1),
+        payload = {
+            "expected_return_date": (
+                datetime.date.today() + datetime.timedelta(days=1)
+            ),
             "book": self.book.id,
         }
         url = reverse(
@@ -86,9 +87,10 @@ class AuthorizedBorrowingApiTests(BorrowingBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_cannot_create_borrowing_for_another_user(self):
-        payload ={
-            "expected_return_date": datetime.date.today() +
-                                    datetime.timedelta(days=1),
+        payload = {
+            "expected_return_date": (
+                datetime.date.today() + datetime.timedelta(days=1)
+            ),
             "book": self.book.id,
             "user": self.admin.id,
         }
@@ -103,9 +105,10 @@ class AuthorizedBorrowingApiTests(BorrowingBaseTestCase):
         self.book.inventory = 0
         self.book.save()
         inventory = self.book.inventory
-        actual_return_date = (datetime.date.today() +
-                              datetime.timedelta(days=5))
-        payload ={
+        actual_return_date = (
+            datetime.date.today() + datetime.timedelta(days=5)
+        )
+        payload = {
             "actual_return_date": actual_return_date
         }
         url = reverse(

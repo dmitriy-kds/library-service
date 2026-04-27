@@ -18,7 +18,6 @@ class PublicBookApiTests(BookBaseTestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data["id"], self.book.id)
 
-
     def test_unauthorized_user_cannot_create_book(self):
         payload = {
             "title": "Test Book",

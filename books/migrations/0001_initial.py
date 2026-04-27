@@ -27,11 +27,18 @@ class Migration(migrations.Migration):
                 (
                     "cover",
                     models.CharField(
-                        choices=[("HARD", "Hard"), ("SOFT", "Soft")], max_length=4
+                        choices=[
+                            ("HARD", "Hard"),
+                            ("SOFT", "Soft")
+                        ],
+                        max_length=4
                     ),
                 ),
                 ("inventory", models.PositiveIntegerField()),
-                ("daily_fee", models.DecimalField(decimal_places=2, max_digits=6)),
+                ("daily_fee", models.DecimalField(
+                    decimal_places=2,
+                    max_digits=6)
+                 ),
             ],
             options={
                 "verbose_name_plural": "books",
